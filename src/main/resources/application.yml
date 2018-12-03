@@ -1,0 +1,25 @@
+server:
+  port: 9000
+
+hikari:
+  datasource:
+    poolName: WebServerLogAnalyzerConnectionPool
+    jdbcUrl: jdbc:mysql://db:3306/loganalyzer
+    username: root
+    password: n1md4
+    driverClassName: com.mysql.cj.jdbc.Driver
+    maximumPoolSize: 3
+
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.MySQLDialect
+      format_sql: true
+    properties:
+      hibernate.temp.use_jdbc_metadata_defaults: false
+
+logging.level:
+  com.zaxxer.hikari.HikariConfig: DEBUG
+  org.hibernate.SQL: DEBUG
+  org.hibernate.type.descriptor.sql.BasicBinder: TRACE

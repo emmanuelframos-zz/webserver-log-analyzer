@@ -2,20 +2,18 @@ package com.webserverloganalyzer.domain;
 
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(schema = "log_analysis", name = "access_log")
+@Table(schema = "log_analyzer", name = "access_log")
 public class AccessLog {
 
     @Id
     @Column(name= "id")
     private BigInteger id;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name= "request_date", nullable = false)
-    private Date date;
+    private String date;
 
     @Column(name= "ip", nullable = false)
     private String ip;
@@ -29,9 +27,8 @@ public class AccessLog {
     @Column(name= "user_agent", nullable = false)
     private String userAgent;
 
-    @ManyToOne
-    @JoinColumn(name="id_access_log_file", nullable=false)
-    private AccessLogFile accessLogFile;
+    @Column(name= "access_log_file_id")
+    private BigInteger accessLogFile;
 
     public BigInteger getId() {
         return id;
@@ -41,11 +38,11 @@ public class AccessLog {
         this.id = id;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -81,11 +78,11 @@ public class AccessLog {
         this.userAgent = userAgent;
     }
 
-    public AccessLogFile getAccessLogFile() {
+    public BigInteger getAccessLogFile() {
         return accessLogFile;
     }
 
-    public void setAccessLogFile(AccessLogFile accessLogFile) {
+    public void setAccessLogFile(BigInteger accessLogFile) {
         this.accessLogFile = accessLogFile;
     }
 

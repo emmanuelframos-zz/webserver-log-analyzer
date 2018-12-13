@@ -2,12 +2,12 @@ package com.webserverloganalyzer.domain;
 
 import javax.persistence.*;
 import java.math.BigInteger;
-import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(schema = "log_analysis", name = "access_log_file")
+@Table(schema = "log_analyzer", name = "access_log_file")
 public class AccessLogFile {
 
     @Id
@@ -20,16 +20,11 @@ public class AccessLogFile {
     @Column(name= "size", nullable = false)
     private Integer size;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name= "start_date", nullable = false)
-    private Date startDate;
+    @Column(name= "processing_time", nullable = false)
+    private BigInteger processingTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name= "finish_date", nullable = false)
-    private Date finishDate;
-
-    @OneToMany(mappedBy = "accessLogFile", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AccessLog> accessLogs;
+    @Transient
+    private Set<AccessLog> accessLogs = new LinkedHashSet<>();
 
     public String getFilePath() {
         return filePath;
@@ -47,20 +42,20 @@ public class AccessLogFile {
         this.size = size;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public BigInteger getId() {
+        return id;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setId(BigInteger id) {
+        this.id = id;
     }
 
-    public Date getFinishDate() {
-        return finishDate;
+    public BigInteger getProcessingTime() {
+        return processingTime;
     }
 
-    public void setFinishDate(Date finishDate) {
-        this.finishDate = finishDate;
+    public void setProcessingTime(BigInteger processingTime) {
+        this.processingTime = processingTime;
     }
 
     public Set<AccessLog> getAccessLogs() {

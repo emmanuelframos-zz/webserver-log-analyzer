@@ -1,19 +1,20 @@
 package com.webserverloganalyzer.api.v1.dto;
 
-import com.webserverloganalyzer.domain.Durations;
-
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.io.Serializable;
 
-public class LogAnalyzerDTO {
-
-    @NotNull
-    public Date startDate;
+public class LogAnalyzerDTO implements Serializable {
 
     @NotNull
-    public Durations duration;
+    public String filePath;
 
-    @NotNull
-    public Integer threshold;
+//    @NotNull
+//    public Date startDate;
+//
+//    @NotNull
+//    public Durations duration;
+//
+//    @NotNull
+//    public Integer threshold;
 
 }

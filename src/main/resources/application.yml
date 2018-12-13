@@ -12,14 +12,19 @@ hikari:
 
 spring:
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       dialect: org.hibernate.dialect.MySQLDialect
-      format_sql: true
+      format_sql: false
     properties:
       hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.jdbc.batch_size: 10000
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.generate_statistics: true
 
-logging.level:
-  com.zaxxer.hikari.HikariConfig: DEBUG
-  org.hibernate.SQL: DEBUG
-  org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+#logging.level:
+#  com.zaxxer.hikari.HikariConfig: DEBUG
+#  org.hibernate.SQL: DEBUG
+#  org.hibernate.type.descriptor.sql.BasicBinder: TRACE

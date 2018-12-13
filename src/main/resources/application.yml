@@ -9,23 +9,7 @@ hikari:
     password: app@2018
     driverClassName: com.mysql.cj.jdbc.Driver
     maximumPoolSize: 3
-    idleTimeout: 30000
-    rewriteBatchedStatements: true
-    cachePrepStmts: true
-    prepStmtCacheSize: 250
-    prepStmtCacheSqlLimit: 2048
-    useServerPrepStmts: true
-    transactionIsolation: TRANSACTION_READ_COMMITTED
     autoCommit: false
-#    <property name="hibernate.hikari.idleTimeout">30000</property>
-#    <property name="hibernate.hikari.dataSource.rewriteBatchedStatements">true</property>
-#    <property name="hibernate.hikari.dataSource.cachePrepStmts">true</property>
-#    <property name="hibernate.hikari.dataSource.prepStmtCacheSize">250</property>
-#
-#    <property name="hibernate.hikari.dataSource.prepStmtCacheSqlLimit">2048</property>
-#    <property name="hibernate.hikari.dataSource.useServerPrepStmts">true</property>
-#    <property name="hibernate.hikari.transactionIsolation">TRANSACTION_READ_COMMITTED</property>
-#    <property name="hibernate.hikari.autoCommit">false</property>
 
 logging.level:
   com.zaxxer.hikari.HikariConfig: DEBUG

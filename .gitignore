@@ -58,8 +58,3 @@ logs
 
 # TeXlipse plugin
 .texlipse
-
-# Gradle
-gradle/wrapper/*.jar
-gradlew
-gradlew.bat

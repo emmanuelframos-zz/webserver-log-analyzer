@@ -15,7 +15,6 @@ public class DataSourceConfig extends HikariConfig {
 
     @Bean
     public DataSource dataSource() {
-        //this.setAutoCommit(false);
         return new HikariDataSource(this);
     }
 }

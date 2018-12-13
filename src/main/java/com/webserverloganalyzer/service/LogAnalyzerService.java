@@ -1,5 +1,6 @@
 package com.webserverloganalyzer.service;
 
+import com.webserverloganalyzer.api.v1.dto.LogAnalyzerRequestDTO;
 import com.webserverloganalyzer.domain.AccessLog;
 import com.webserverloganalyzer.domain.AccessLogFile;
 import com.webserverloganalyzer.parser.AccessLogParser;
@@ -13,12 +14,14 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
-public class AccessLogService {
+public class LogAnalyzerService {
 
-    private final Logger logger = LoggerFactory.getLogger( AccessLogService.class);
+    private final Logger logger = LoggerFactory.getLogger( LogAnalyzerService.class);
 
     @Autowired
     private FileReader fileReader;
@@ -29,7 +32,7 @@ public class AccessLogService {
     @Autowired
     private AccessLogFileRepository accessLogFileRepository;
 
-    public void analyze(String path) throws IOException {
+    public void batchInsert(String path) throws IOException {
 
         long startTime = System.currentTimeMillis();
 
@@ -56,5 +59,9 @@ public class AccessLogService {
         logger.info("NonHeap {} MB", ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed()/1024);
 
         logger.info("Tempo gasto: {} segs", (System.currentTimeMillis() - startTime)/1000);
+    }
+
+    public Set<String> analyze(LogAnalyzerRequestDTO logAnalyzerRequestDTO){
+        return Stream.of("127.0.0.1").collect(Collectors.toSet());
     }
 }

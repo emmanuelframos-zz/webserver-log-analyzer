@@ -1,30 +1,17 @@
 package com.webserverloganalyzer.domain;
 
-import javax.persistence.*;
 import java.math.BigInteger;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
-@Entity
-@Table(schema = "log_analyzer", name = "access_log_file")
 public class AccessLogFile {
 
-    @Id
-    @Column(name = "id")
     private BigInteger id;
 
-    @Column(name= "file_path", nullable = false)
     private String filePath;
 
-    @Column(name= "size", nullable = false)
     private Integer size;
 
-    @Column(name= "processing_time", nullable = false)
-    private BigInteger processingTime;
-
-    @Transient
-    private Set<AccessLog> accessLogs = new LinkedHashSet<>();
+    private List<AccessLog> accessLogs = new LinkedList<>();
 
     public String getFilePath() {
         return filePath;
@@ -50,19 +37,11 @@ public class AccessLogFile {
         this.id = id;
     }
 
-    public BigInteger getProcessingTime() {
-        return processingTime;
-    }
-
-    public void setProcessingTime(BigInteger processingTime) {
-        this.processingTime = processingTime;
-    }
-
-    public Set<AccessLog> getAccessLogs() {
+    public List<AccessLog> getAccessLogs() {
         return accessLogs;
     }
 
-    public void setAccessLogs(Set<AccessLog> accessLogs) {
+    public void setAccessLogs(List<AccessLog> accessLogs) {
         this.accessLogs = accessLogs;
     }
 

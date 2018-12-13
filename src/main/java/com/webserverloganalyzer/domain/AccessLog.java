@@ -1,33 +1,22 @@
 package com.webserverloganalyzer.domain;
 
-import javax.persistence.*;
 import java.math.BigInteger;
 import java.util.Objects;
 
-@Entity
-@Table(schema = "log_analyzer", name = "access_log")
 public class AccessLog {
 
-    @Id
-    @Column(name= "id")
     private BigInteger id;
 
-    @Column(name= "request_date", nullable = false)
-    private String date;
+    private String requestDate;
 
-    @Column(name= "ip", nullable = false)
     private String ip;
 
-    @Column(name= "request", nullable = false)
     private String request;
 
-    @Column(name= "status", nullable = false)
     private String status;
 
-    @Column(name= "user_agent", nullable = false)
     private String userAgent;
 
-    @Column(name= "access_log_file_id")
     private BigInteger accessLogFile;
 
     public BigInteger getId() {
@@ -38,12 +27,12 @@ public class AccessLog {
         this.id = id;
     }
 
-    public String getDate() {
-        return date;
+    public String getRequestDate() {
+        return requestDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDate(String requestDate) {
+        this.requestDate = requestDate;
     }
 
     public String getIp() {
@@ -91,12 +80,12 @@ public class AccessLog {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AccessLog accessLog = (AccessLog) o;
-        return date.equals(accessLog.date) &&
+        return requestDate.equals(accessLog.requestDate) &&
                 ip.equals(accessLog.ip);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, ip);
+        return Objects.hash(requestDate, ip);
     }
 }

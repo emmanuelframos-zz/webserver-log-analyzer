@@ -25,9 +25,8 @@ dependencies {
     def springBootVersion = '1.5.14.RELEASE'
     compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-jetty:${springBootVersion}"
-    compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-logging:${springBootVersion}"
-
 
     /** Database **/
     compile "com.zaxxer:HikariCP:3.1.0"

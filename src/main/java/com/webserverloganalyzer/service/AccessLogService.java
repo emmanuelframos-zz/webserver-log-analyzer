@@ -9,12 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
-import java.math.BigInteger;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,10 +38,10 @@ public class AccessLogService {
 
         AccessLogFile accessLogFile = new AccessLogFile();
 
-        Set<AccessLog> accessLogs = fileReader
+        List<AccessLog> accessLogs = fileReader
                .readFile(path)
                .map(l -> accessLogParser.parse(l, accessLogFile))
-               .collect(Collectors.toSet());
+               .collect(Collectors.toList());
 
         logger.info("Heap {} MB", ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed()/1024);
         logger.info("NonHeap {} MB", ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed()/1024);
@@ -51,9 +49,8 @@ public class AccessLogService {
         accessLogFile.setFilePath(path);
         accessLogFile.setSize(1);
         accessLogFile.setAccessLogs(accessLogs);
-        accessLogFile.setProcessingTime(BigInteger.valueOf(System.currentTimeMillis() - startTime));
 
-        accessLogFileRepository.persist(accessLogFile);
+        accessLogFileRepository.batchInsert(accessLogFile);
 
         logger.info("Heap {} MB", ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed()/1024);
         logger.info("NonHeap {} MB", ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed()/1024);

@@ -3,81 +3,66 @@ package com.webserverloganalyzer.repository;
 import com.webserverloganalyzer.domain.AccessLog;
 import com.webserverloganalyzer.domain.AccessLogFile;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
+import javax.sql.DataSource;
 import java.math.BigInteger;
-import java.util.Objects;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 @Repository
 public class AccessLogFileRepository {
 
     @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private AccessLogRepository accessLogRepository;
+    private DataSource dataSource;
 
-    @Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
-    private Integer batchSize;
+    @Transactional
+    public int[] batchInsert(AccessLogFile accessLogFile) {
 
-    public void persist(AccessLogFile accessLogFile){
+        BigInteger accessLogFileId = save(accessLogFile);
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-        EntityTransaction entityTransaction = entityManager.getTransaction();
+        return jdbcTemplate.batchUpdate("INSERT INTO log_analyzer.access_log(request_date, ip, status, request, user_agent, access_log_file_id)" +
+                        " VALUES (?, ?, ?, ?, ?, ?)",
+                new BatchPreparedStatementSetter() {
 
-        try {
+                    @Override
+                    public void setValues(PreparedStatement ps, int i) throws SQLException {
+                        AccessLog accessLog = accessLogFile.getAccessLogs().get(i);
+                        ps.setString(1, accessLog.getRequestDate());
+                        ps.setString(2, accessLog.getIp());
+                        ps.setString(3, accessLog.getStatus());
+                        ps.setString(4, accessLog.getRequest());
+                        ps.setString(5, accessLog.getUserAgent());
+                        ps.setInt(6, accessLogFileId.intValue());
+                    }
 
-            entityTransaction.begin();
-
-            accessLogFile.setId(findMaxIdPlusOne());
-
-            entityManager.persist(accessLogFile);
-
-            BigInteger accessLogIdCount = accessLogRepository.findMaxIdPlusOne();
-            int entityCount = accessLogFile.getAccessLogs().size();
-            for (AccessLog accessLog : accessLogFile.getAccessLogs()){
-                if (entityCount > 0 && entityCount % batchSize == 0) {
-                    entityTransaction.commit();
-                    entityTransaction.begin();
-                    entityManager.clear();
-                }
-
-                accessLog.setId(accessLogIdCount);
-                accessLog.setAccessLogFile(accessLogFile.getId());
-
-                entityManager.persist(accessLog);
-                accessLogIdCount = accessLogIdCount.add(BigInteger.ONE);
-                ++entityCount;
-            }
-
-            entityTransaction.commit();
-
-        } catch (RuntimeException e) {
-            if (entityTransaction.isActive()) {
-                entityTransaction.rollback();
-            }
-            throw e;
-        } finally {
-            entityManager.close();
-        }
+                    @Override
+                    public int getBatchSize() {
+                        System.out.println("Size " + accessLogFile.getAccessLogs().size());
+                        return accessLogFile.getAccessLogs().size();
+                    }
+                });
     }
 
-    public BigInteger findMaxIdPlusOne(){
+    public BigInteger save(AccessLogFile accessLogFile){
+        GeneratedKeyHolder holder = new GeneratedKeyHolder();
 
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        jdbcTemplate.update(con -> {
+            PreparedStatement statement = con.prepareStatement("INSERT INTO log_analyzer.access_log_file(file_path, size) VALUES (?, ?) ", Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, accessLogFile.getFilePath());
+            statement.setInt(2, accessLogFile.getSize());
+            return statement;
+        }, holder);
 
-        Query query = entityManager.createNativeQuery("SELECT MAX(id) + 1 FROM access_log_file");
-
-        BigInteger id = (BigInteger)query.getSingleResult();
-
-        entityManager.close();
-
-        return (Objects.isNull(id)?BigInteger.ONE:id);
+        return BigInteger.valueOf(holder.getKey().longValue());
     }
 }

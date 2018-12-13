@@ -1,5 +1,6 @@
 package com.webserverloganalyzer.api.v1.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.webserverloganalyzer.domain.Durations;
 
 import javax.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ public class LogAnalyzerRequestDTO implements Serializable {
     @NotNull(message = "File path is mandatory")
     public String filePath;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd.HH:mm:ss")
     @NotNull(message = "Start date is mandatory")
     public Date startDate;
 

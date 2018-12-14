@@ -3,8 +3,6 @@ services:
   db:
     image: mysql:8.0.13
     command: --default-authentication-plugin=mysql_native_password --init-file /data/application/init.sql
-    ports:
-      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: n1md4
       MYSQL_USER: app
@@ -24,15 +22,17 @@ services:
     networks:
       - loganalyzer_cluster
 
-#  loganalizer:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    command: ["./wait-for-it.sh", "db:3306"]
-#    ports:
-#      - "8761:8761"
-#    networks:
-#      - loganalyzer_cluster
+  loganalizer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["./wait-for-it.sh", "db:3306", "--", "java", "-jar", "webserver-log-analyzer.jar"]
+    ports:
+      - 9000:9000
+    volumes:
+      - /tmp:/tmp
+    networks:
+      - loganalyzer_cluster
 
 networks:
   loganalyzer_cluster:

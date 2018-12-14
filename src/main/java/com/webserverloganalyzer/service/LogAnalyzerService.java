@@ -32,6 +32,8 @@ public class LogAnalyzerService {
     @Autowired
     private AccessLogFileRepository accessLogFileRepository;
 
+    private static final Integer MB = 1024 * 1024;
+
     public BigInteger batchInsert(String path) throws IOException {
 
         long startTime = System.currentTimeMillis();
@@ -54,7 +56,7 @@ public class LogAnalyzerService {
         logger.debug("Heap {} MB", ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed()/1024);
         logger.debug("NonHeap {} MB", ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed()/1024);
 
-        logger.info("File size approx. {} MB", accessLogFile.getSize().longValue()/(1024 * 1024));
+        logger.info("File size approx. {} MB", accessLogFile.getSize().longValue()/MB);
         logger.info("Time spent {} secs", (System.currentTimeMillis() - startTime)/1000);
 
         return accessLogFileId;

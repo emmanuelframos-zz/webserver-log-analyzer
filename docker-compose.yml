@@ -15,13 +15,6 @@ services:
     networks:
       - loganalyzer_cluster
 
-  adminer:
-    image: adminer
-    ports:
-      - 8080:8080
-    networks:
-      - loganalyzer_cluster
-
   loganalizer:
     build:
       context: .

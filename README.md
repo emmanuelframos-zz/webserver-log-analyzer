@@ -3,7 +3,6 @@ The goal of this application is parse a web server access log file, load the log
 
 This application was built on Spring Boot and deployed on Docker Compose.
 
-<br>
 
 ## Running Application
 1. Access application root directory

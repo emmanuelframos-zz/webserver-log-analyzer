@@ -7,7 +7,7 @@ USE log_analyzer;
 CREATE TABLE IF NOT EXISTS access_log_file(
     id BIGINT AUTO_INCREMENT,
     file_path VARCHAR(100) not null,
-    size INTEGER not null,
+    size BIGINT not null,
     CONSTRAINT pk_access_log_file_id PRIMARY KEY(id)
 );
 

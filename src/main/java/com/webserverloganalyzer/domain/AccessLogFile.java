@@ -1,7 +1,9 @@
 package com.webserverloganalyzer.domain;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 public class AccessLogFile {
 
@@ -9,7 +11,7 @@ public class AccessLogFile {
 
     private String filePath;
 
-    private Integer size;
+    private BigInteger size;
 
     private List<AccessLog> accessLogs = new LinkedList<>();
 
@@ -21,11 +23,11 @@ public class AccessLogFile {
         this.filePath = filePath;
     }
 
-    public Integer getSize() {
+    public BigInteger getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(BigInteger size) {
         this.size = size;
     }
 

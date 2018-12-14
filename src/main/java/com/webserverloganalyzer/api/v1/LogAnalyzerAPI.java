@@ -1,6 +1,7 @@
 package com.webserverloganalyzer.api.v1;
 
 import com.webserverloganalyzer.api.v1.dto.LogAnalyzerRequestDTO;
+import com.webserverloganalyzer.api.v1.dto.LogAnalyzerResponseDTO;
 import com.webserverloganalyzer.service.LogAnalyzerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,7 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Set;
+import java.math.BigInteger;
+import java.util.List;
 
 @RestController
 @RequestMapping(
@@ -24,10 +26,10 @@ public class LogAnalyzerAPI {
     private LogAnalyzerService logAnalyzerService;
 
     @PostMapping(value = "/analyze")
-    public Set<String> analyze(@Valid @RequestBody LogAnalyzerRequestDTO logAnalyzerRequestDTO) throws IOException {
+    public List<LogAnalyzerResponseDTO> analyze(@Valid @RequestBody LogAnalyzerRequestDTO logAnalyzerRequestDTO) throws IOException {
 
-        logAnalyzerService.batchInsert(logAnalyzerRequestDTO.filePath);
+        BigInteger accessLogFileId = logAnalyzerService.batchInsert(logAnalyzerRequestDTO.filePath);
 
-        return logAnalyzerService.analyze(logAnalyzerRequestDTO);
+        return logAnalyzerService.analyze(accessLogFileId, logAnalyzerRequestDTO);
     }
 }

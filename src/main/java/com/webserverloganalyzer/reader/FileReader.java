@@ -17,4 +17,11 @@ public class FileReader {
 
         return Files.lines(path);
     }
+
+    public Long getSize(String filePath) throws IOException {
+
+        Path path = Paths.get(filePath);
+
+        return Files.size(path);
+    }
 }

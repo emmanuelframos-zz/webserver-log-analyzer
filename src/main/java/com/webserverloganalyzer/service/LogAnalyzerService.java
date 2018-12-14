@@ -1,6 +1,7 @@
 package com.webserverloganalyzer.service;
 
 import com.webserverloganalyzer.api.v1.dto.LogAnalyzerRequestDTO;
+import com.webserverloganalyzer.api.v1.dto.LogAnalyzerResponseDTO;
 import com.webserverloganalyzer.domain.AccessLog;
 import com.webserverloganalyzer.domain.AccessLogFile;
 import com.webserverloganalyzer.parser.AccessLogParser;
@@ -13,10 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.math.BigInteger;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class LogAnalyzerService {
@@ -32,36 +32,39 @@ public class LogAnalyzerService {
     @Autowired
     private AccessLogFileRepository accessLogFileRepository;
 
-    public void batchInsert(String path) throws IOException {
+    public BigInteger batchInsert(String path) throws IOException {
 
         long startTime = System.currentTimeMillis();
 
-        logger.info("Heap {} MB", ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed()/1024);
-        logger.info("NonHeap {} MB", ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed()/1024);
-
-        AccessLogFile accessLogFile = new AccessLogFile();
+        logger.debug("Heap {} MB", ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed()/1024);
+        logger.debug("NonHeap {} MB", ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed()/1024);
 
         List<AccessLog> accessLogs = fileReader
                .readFile(path)
-               .map(l -> accessLogParser.parse(l, accessLogFile))
+               .map(l -> accessLogParser.parse(l))
                .collect(Collectors.toList());
 
-        logger.info("Heap {} MB", ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed()/1024);
-        logger.info("NonHeap {} MB", ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed()/1024);
-
+        AccessLogFile accessLogFile = new AccessLogFile();
         accessLogFile.setFilePath(path);
-        accessLogFile.setSize(1);
+        accessLogFile.setSize(BigInteger.valueOf(fileReader.getSize(path)));
         accessLogFile.setAccessLogs(accessLogs);
 
-        accessLogFileRepository.batchInsert(accessLogFile);
+        BigInteger accessLogFileId = accessLogFileRepository.batchInsert(accessLogFile);
 
-        logger.info("Heap {} MB", ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed()/1024);
-        logger.info("NonHeap {} MB", ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed()/1024);
+        logger.debug("Heap {} MB", ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed()/1024);
+        logger.debug("NonHeap {} MB", ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed()/1024);
 
-        logger.info("Tempo gasto: {} segs", (System.currentTimeMillis() - startTime)/1000);
+        logger.info("File size approx. {} MB", accessLogFile.getSize().longValue()/(1024 * 1024));
+        logger.info("Time spent {} secs", (System.currentTimeMillis() - startTime)/1000);
+
+        return accessLogFileId;
     }
 
-    public Set<String> analyze(LogAnalyzerRequestDTO logAnalyzerRequestDTO){
-        return Stream.of("127.0.0.1").collect(Collectors.toSet());
+    public List<LogAnalyzerResponseDTO> analyze(BigInteger accessLogFileId, LogAnalyzerRequestDTO logAnalyzerRequestDTO){
+        List<LogAnalyzerResponseDTO> responses = accessLogFileRepository.filterIPs(accessLogFileId, logAnalyzerRequestDTO);
+
+        logger.info("Found {} results", responses.size());
+
+        return responses;
     }
 }

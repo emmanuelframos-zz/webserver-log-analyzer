@@ -1,7 +1,6 @@
 package com.webserverloganalyzer.parser;
 
 import com.webserverloganalyzer.domain.AccessLog;
-import com.webserverloganalyzer.domain.AccessLogFile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -10,7 +9,7 @@ public class AccessLogParser {
 
     private static final String TOKEN = "\\|";
 
-    public AccessLog parse(String rawAccessLog, AccessLogFile accessLogFile){
+    public AccessLog parse(String rawAccessLog){
 
         String[] rawAccessLogArray = StringUtils.deleteAny(rawAccessLog, "\"").split(TOKEN);
 

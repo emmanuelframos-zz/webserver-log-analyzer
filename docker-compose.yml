@@ -19,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: ["./wait-for-it.sh", "db:3306", "--", "java", "-jar", "webserver-log-analyzer.jar"]
+    command: ["java", "-jar", "webserver-log-analyzer.jar"]
     ports:
       - 9000:9000
     volumes:

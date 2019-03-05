@@ -1,1 +1,1 @@
-./gradlew -q clean build test --daemon --build-cache --parallel --configure-on-demand
+./gradlew -q clean build -x test --daemon --build-cache --parallel --configure-on-demand

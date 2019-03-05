@@ -10,11 +10,10 @@ This application was built on Spring Boot and deployed on Docker Compose.
 
 
 ## Usage
-After application has started, copy your log files to "/tmp" directory.
 
-On the sequence, submit a request using any HTTP client, as *curl* for example:
+Submit a request using any HTTP client, as *curl* for example:
 ~~~
-curl -v -X POST -H "Content-Type: application/json" 'http://localhost:9000/api/v1/analyze' -d '{"filePath":"/tmp/PUT_FILE_NAME_HERE", "startDate":"2017-01-01.13:00:00", "duration":"DAILY", "threshold":250}'
+curl -v -X POST -H "Content-Type: application/json" 'http://localhost:9000/api/v1/analyze' -d '{"startDate":"2017-01-01.13:00:00", "duration":"DAILY", "threshold":250}'
 ~~~
 
 

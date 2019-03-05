@@ -1,8 +1,6 @@
 package com.webserverloganalyzer.domain;
 
 import javax.persistence.*;
-import java.math.BigInteger;
-import java.util.Objects;
 
 @Entity
 @Table(schema = "log_analyzer", name = "access_log")
@@ -10,7 +8,7 @@ public class AccessLog {
 
     @Id
     @Column(name= "id")
-    private BigInteger id;
+    private Long id;
 
     @Column(name= "request_date", nullable = false)
     private String date;
@@ -27,14 +25,11 @@ public class AccessLog {
     @Column(name= "user_agent", nullable = false)
     private String userAgent;
 
-    @Column(name= "access_log_file_id")
-    private BigInteger accessLogFile;
-
-    public BigInteger getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -78,25 +73,4 @@ public class AccessLog {
         this.userAgent = userAgent;
     }
 
-    public BigInteger getAccessLogFile() {
-        return accessLogFile;
-    }
-
-    public void setAccessLogFile(BigInteger accessLogFile) {
-        this.accessLogFile = accessLogFile;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AccessLog accessLog = (AccessLog) o;
-        return date.equals(accessLog.date) &&
-                ip.equals(accessLog.ip);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(date, ip);
-    }
 }

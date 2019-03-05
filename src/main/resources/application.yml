@@ -12,17 +12,16 @@ hikari:
 
 spring:
   jpa:
-    show-sql: false
+    show-sql: true
     hibernate:
       dialect: org.hibernate.dialect.MySQLDialect
-      format_sql: false
+      format_sql: true
     properties:
-      hibernate.temp.use_jdbc_metadata_defaults: false
-      hibernate.jdbc.batch_size: 10000
-      hibernate.order_inserts: true
-      hibernate.order_updates: true
-      hibernate.generate_statistics: true
-
+      hibernate:
+        temp.use_jdbc_metadata_defaults: false
+        jdbc.batch_size: 10000
+        order_inserts: true
+        generate_statistics: true
 
 #logging.level:
 #  com.zaxxer.hikari.HikariConfig: DEBUG

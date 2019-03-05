@@ -12,7 +12,7 @@ services:
       MYSQL_DATABASE: log_analyzer
       MYSQL_ROOT_HOST: '%'
     volumes:
-      - /var/lib/mysql:/var/lib/mysql
+      - C:/var/lib/mysql:/var/lib/mysql
       - ./database:/data/application
     networks:
       - loganalyzer_cluster
@@ -30,7 +30,7 @@ services:
 #      dockerfile: Dockerfile
 #    command: ["./wait-for-it.sh", "db:3306"]
 #    ports:
-#      - "8761:8761"
+#      - "9000:9000"
 #    networks:
 #      - loganalyzer_cluster
 
